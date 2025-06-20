@@ -1,0 +1,49 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'src/**/*.ts'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'src/**/*.ts'
+
+jobs:
+  check-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+    
+    - name: Check README links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/markdown-link-check-config.json'
+      continue-on-error: true
+    
+    - name: Generate TypeDoc documentation
+      run: |
+        npm ci
+        npx typedoc src/index.ts --out docs/api --excludePrivate
+      continue-on-error: true  # TypeDoc might not be configured yet
+    
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-docs
+        path: docs/api/
+        retention-days: 30
+      if: success()

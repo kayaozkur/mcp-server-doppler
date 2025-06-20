@@ -291,7 +291,7 @@ with MCPDopplerClient() as client:
     client.set_secret("myapp", "development", "API_KEY", "sk-12345")
 ```
 
-See the [Lepion project](https://github.com/kayaozkur/lepion) for a complete Python integration example.
+See the examples directory for complete integration examples.
 
 ## Token Types
 
@@ -336,7 +336,6 @@ Once configured, you can ask Claude to:
 
 ## Related Projects
 
-- [Lepion](https://github.com/kayaozkur/lepion) - Comprehensive secret management system with MCP integration
 - [Doppler CLI](https://docs.doppler.com/docs/cli) - Official Doppler command-line tool
 - [Model Context Protocol](https://modelcontextprotocol.io) - MCP specification and documentation
 
