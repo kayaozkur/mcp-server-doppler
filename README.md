@@ -1,19 +1,11 @@
-<div align="center">
-  <img src="https://github.com/kayaozkur/mcp-doppler-server/raw/main/docs/logo.png" alt="Doppler MCP Server Logo" width="200"/>
-  
-  # Doppler MCP Server
-  
-  **A Model Context Protocol (MCP) server for Doppler secret management**
-  
-  [![npm version](https://badge.fury.io/js/mcp-doppler-server.svg)](https://badge.fury.io/js/mcp-doppler-server)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-  [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
-  
-  *Enabling AI models to securely interact with Doppler secrets and configurations*
-  
-  [Installation](#installation) • [Configuration](#configuration) • [Usage](#usage) • [API Reference](#available-tools) • [Contributing](#contributing)
-  
-</div>
+# MCP Doppler Server
+
+[![npm version](https://img.shields.io/npm/v/mcp-doppler-server.svg)](https://www.npmjs.com/package/mcp-doppler-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
+
+A Model Context Protocol (MCP) server that provides secure access to Doppler's secret management platform. This server allows AI assistants like Claude to manage secrets, environment variables, and configurations through Doppler's API.
 
 ---
 
@@ -87,6 +79,21 @@ Add the following to your Claude Desktop configuration file:
 
 **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "doppler": {
+      "command": "mcp-doppler-server",
+      "env": {
+        "DOPPLER_TOKEN": "your-doppler-token"
+      }
+    }
+  }
+}
+```
+
+Or if installed locally:
 
 ```json
 {
@@ -266,8 +273,76 @@ The server includes comprehensive error handling:
 
 MIT License - see LICENSE file for details
 
+## Python Client Integration
+
+For Python applications, you can use the MCP client to interact with the server:
+
+```python
+from mcp_doppler_client import MCPDopplerClient
+
+with MCPDopplerClient() as client:
+    # List all projects
+    projects = client.list_projects()
+    
+    # Get secrets from a project/config
+    secrets = client.list_secrets("myapp", "production")
+    
+    # Set a secret
+    client.set_secret("myapp", "development", "API_KEY", "sk-12345")
+```
+
+See the [Lepion project](https://github.com/kayaozkur/lepion) for a complete Python integration example.
+
+## Token Types
+
+Doppler supports several token types:
+
+- **CLI Tokens** (`dp.ct.*`) - Full read/write access based on user permissions
+- **Personal Tokens** (`dp.pt.*`) - User-specific API access
+- **Service Tokens** (`dp.st.*`) - Typically read-only for production
+- **Service Account Tokens** (`dp.sa.*`) - Read/write for automation
+
+For AI assistants, we recommend:
+- CLI tokens for development (full access)
+- Service tokens for production (read-only)
+
+## Example Use Cases
+
+Once configured, you can ask Claude to:
+
+- "List all my Doppler projects"
+- "Show me the secrets in the production environment"
+- "Update the DATABASE_URL in staging"
+- "Create a read-only service token for the API"
+- "Promote all secrets from development to staging, excluding DEBUG keys"
+- "Show me the activity logs for the last hour"
+- "Delete the OLD_API_KEY from all environments"
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"DOPPLER_TOKEN not found"**
+   - Ensure the token is set in your Claude Desktop config
+   - Verify the token is valid and has appropriate permissions
+
+2. **"Failed to list secrets"**
+   - Check that the project and config names are correct
+   - Verify the token has access to the specified project
+
+3. **"Rate limit exceeded"**
+   - The server implements automatic retry with backoff
+   - Consider using a service account token for higher limits
+
+## Related Projects
+
+- [Lepion](https://github.com/kayaozkur/lepion) - Comprehensive secret management system with MCP integration
+- [Doppler CLI](https://docs.doppler.com/docs/cli) - Official Doppler command-line tool
+- [Model Context Protocol](https://modelcontextprotocol.io) - MCP specification and documentation
+
 ## Support
 
-- **Doppler Documentation**: https://docs.doppler.com
-- **MCP Documentation**: https://modelcontextprotocol.io
-- **Issues**: https://github.com/kayaozkur/mcp-doppler-server/issues
+- 📧 Email: kayaozkur@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/kayaozkur/mcp-doppler-server/issues)
+- 📖 Doppler Docs: [docs.doppler.com](https://docs.doppler.com)
+- 🤖 MCP Docs: [modelcontextprotocol.io](https://modelcontextprotocol.io)
