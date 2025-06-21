@@ -23,11 +23,21 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "jest"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "@jest/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ts-jest"
+        update-types: ["version-update:semver-major"]
     groups:
       # Group related updates together
       typescript-eslint:
         patterns:
           - "@typescript-eslint/*"
+      jest:
+        patterns:
+          - "jest"
+          - "@jest/*"
+          - "ts-jest"
+          - "@types/jest"
     
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
