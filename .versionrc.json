@@ -1,0 +1,26 @@
+{
+  "types": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Bug Fixes" },
+    { "type": "chore", "section": "Chores" },
+    { "type": "docs", "section": "Documentation" },
+    { "type": "style", "section": "Styles" },
+    { "type": "refactor", "section": "Code Refactoring" },
+    { "type": "perf", "section": "Performance Improvements" },
+    { "type": "test", "section": "Tests" },
+    { "type": "build", "section": "Build System" },
+    { "type": "ci", "section": "Continuous Integration" }
+  ],
+  "commitUrlFormat": "https://github.com/kayaozkur/mcp-doppler-server/commit/{{hash}}",
+  "compareUrlFormat": "https://github.com/kayaozkur/mcp-doppler-server/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "https://github.com/kayaozkur/mcp-doppler-server/issues/{{id}}",
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}",
+  "skip": {
+    "changelog": false,
+    "commit": false,
+    "tag": false
+  },
+  "scripts": {
+    "postchangelog": "prettier --write CHANGELOG.md"
+  }
+}

@@ -44,16 +44,22 @@ jobs:
     - name: Build project
       run: npm run build
     
-    - name: Bump version
+    - name: Run tests
+      run: npm test
+    
+    - name: Generate changelog and bump version
       id: version
       run: |
-        npm version ${{ github.event.inputs.version }} -m "chore: release %s"
+        npm run release:${{ github.event.inputs.version }}
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
     
     - name: Push changes
       run: |
         git push
         git push --tags
+    
+    - name: Extract release notes
+      run: node .github/workflows/extract-changelog.js
     
     - name: Create GitHub Release
       uses: actions/create-release@v1
@@ -62,16 +68,7 @@ jobs:
       with:
         tag_name: v${{ steps.version.outputs.version }}
         release_name: Release v${{ steps.version.outputs.version }}
-        body: |
-          ## Changes in this release
-          
-          - See [commits](https://github.com/${{ github.repository }}/compare/v${{ steps.version.outputs.version }}...HEAD) for details
-          
-          ## Installation
-          
-          ```bash
-          npm install -g mcp-doppler-server@${{ steps.version.outputs.version }}
-          ```
+        body_path: ./release-notes.md
         draft: false
         prerelease: false
     
