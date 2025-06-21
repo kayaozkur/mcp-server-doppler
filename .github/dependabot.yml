@@ -15,6 +15,19 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    ignore:
+      # Ignore major version updates for critical dev dependencies
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@typescript-eslint/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "jest"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group related updates together
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
     
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
