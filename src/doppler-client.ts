@@ -1,6 +1,10 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { logger } from './logger.js';
 
+/**
+ * Represents a Doppler project
+ * @interface DopplerProject
+ */
 interface DopplerProject {
   id: string;
   slug: string;
@@ -10,6 +14,10 @@ interface DopplerProject {
   updated_at: string;
 }
 
+/**
+ * Represents a Doppler configuration environment
+ * @interface DopplerConfig
+ */
 interface DopplerConfig {
   name: string;
   root: boolean;
@@ -21,6 +29,10 @@ interface DopplerConfig {
   last_fetch_at?: string;
 }
 
+/**
+ * Represents a Doppler secret
+ * @interface DopplerSecret
+ */
 interface DopplerSecret {
   name: string;
   value?: {
@@ -29,6 +41,10 @@ interface DopplerSecret {
   };
 }
 
+/**
+ * Represents a Doppler service token
+ * @interface DopplerServiceToken
+ */
 interface DopplerServiceToken {
   name: string;
   slug: string;
@@ -41,6 +57,10 @@ interface DopplerServiceToken {
   created_at: string;
 }
 
+/**
+ * Represents a Doppler activity log entry
+ * @interface DopplerActivityLog
+ */
 interface DopplerActivityLog {
   id: string;
   text: string;
@@ -55,9 +75,20 @@ interface DopplerActivityLog {
   created_at: string;
 }
 
+/**
+ * Client for interacting with the Doppler API
+ * @class DopplerClient
+ * @example
+ * const client = new DopplerClient('dp.st.your_token');
+ * const projects = await client.listProjects();
+ */
 export class DopplerClient {
   private axios: AxiosInstance;
 
+  /**
+   * Creates a new Doppler API client
+   * @param {string} token - Doppler API token (service, personal, or CLI token)
+   */
   constructor(token: string) {
     this.axios = axios.create({
       baseURL: 'https://api.doppler.com/v3',
@@ -98,6 +129,11 @@ export class DopplerClient {
     );
   }
 
+  /**
+   * Lists all Doppler projects accessible by the token
+   * @returns {Promise<DopplerProject[]>} Array of Doppler projects
+   * @throws {Error} If the API request fails
+   */
   async listProjects(): Promise<DopplerProject[]> {
     try {
       const response = await this.axios.get('/projects', {
@@ -110,6 +146,12 @@ export class DopplerClient {
     }
   }
 
+  /**
+   * Lists all configurations for a specific project
+   * @param {string} project - The project slug
+   * @returns {Promise<DopplerConfig[]>} Array of configurations
+   * @throws {Error} If the API request fails
+   */
   async listConfigs(project: string): Promise<DopplerConfig[]> {
     try {
       const response = await this.axios.get('/configs', {
@@ -122,6 +164,13 @@ export class DopplerClient {
     }
   }
 
+  /**
+   * Lists all secret names in a specific configuration
+   * @param {string} project - The project slug
+   * @param {string} config - The configuration name
+   * @returns {Promise<string[]>} Array of secret names
+   * @throws {Error} If the API request fails
+   */
   async listSecrets(project: string, config: string): Promise<string[]> {
     try {
       const response = await this.axios.get('/configs/config/secrets/names', {
@@ -134,6 +183,14 @@ export class DopplerClient {
     }
   }
 
+  /**
+   * Retrieves a specific secret value
+   * @param {string} project - The project slug
+   * @param {string} config - The configuration name
+   * @param {string} name - The secret name
+   * @returns {Promise<DopplerSecret>} The secret object with name and value
+   * @throws {Error} If the secret doesn't exist or API request fails
+   */
   async getSecret(project: string, config: string, name: string): Promise<DopplerSecret> {
     try {
       const response = await this.axios.get('/configs/config/secrets', {
@@ -150,6 +207,15 @@ export class DopplerClient {
     }
   }
 
+  /**
+   * Creates or updates a secret
+   * @param {string} project - The project slug
+   * @param {string} config - The configuration name
+   * @param {string} name - The secret name
+   * @param {string} value - The secret value
+   * @returns {Promise<{ created: boolean }>} Object indicating if secret was created (true) or updated (false)
+   * @throws {Error} If the API request fails
+   */
   async setSecret(
     project: string,
     config: string,

@@ -1,0 +1,28 @@
+{
+  "entryPoints": ["src/index.ts", "src/doppler-client.ts", "src/tools.ts"],
+  "out": "docs/api",
+  "readme": "README.md",
+  "navigationLinks": {
+    "GitHub": "https://github.com/kayaozkur/mcp-doppler-server",
+    "NPM": "https://www.npmjs.com/package/mcp-doppler-server"
+  },
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Main",
+    "Client",
+    "Tools",
+    "Types",
+    "*"
+  ],
+  "plugin": ["typedoc-plugin-markdown"],
+  "hideGenerator": true,
+  "githubPages": false,
+  "name": "MCP Doppler Server API",
+  "theme": "default",
+  "lightHighlightTheme": "github-light",
+  "darkHighlightTheme": "github-dark"
+}

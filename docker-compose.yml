@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mcp-doppler-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: mcp-doppler-server:latest
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - NODE_ENV=production
+    volumes:
+      # Mount for local development (optional)
+      # - ./dist:/app/dist:ro
+      # - ./node_modules:/app/node_modules:ro
+    restart: unless-stopped
+    # ports:
+    #   - "3000:3000"  # Uncomment if server exposes HTTP endpoint
+
+  # Development service
+  mcp-doppler-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+    image: mcp-doppler-server:dev
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN}
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
+      - NODE_ENV=development
+    volumes:
+      - ./src:/app/src
+      - ./dist:/app/dist
+      - ./package.json:/app/package.json:ro
+      - ./tsconfig.json:/app/tsconfig.json:ro
+    command: npm run dev
+    restart: unless-stopped
+    profiles:
+      - dev
