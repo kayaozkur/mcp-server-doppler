@@ -210,6 +210,23 @@ doppler://project/my-app
 doppler://project/my-app/config/production
 ```
 
+## Examples
+
+See the [examples directory](./examples/) for complete usage examples:
+
+- **[TypeScript Example](./examples/using-mcp-server.ts)**: Shows how to use the MCP server from a TypeScript application
+- **[Examples README](./examples/README.md)**: Detailed documentation of all examples
+
+Quick example:
+```typescript
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+
+const result = await client.callTool({
+  name: 'doppler_list_projects',
+  arguments: {},
+});
+```
+
 ## Security Best Practices
 
 1. **Token Security**:
