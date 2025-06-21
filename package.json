@@ -55,7 +55,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
+    "@jest/globals": "^30.0.2",
     "@types/jest": "^29.5.0",
     "@types/node": "^24.0.3",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
