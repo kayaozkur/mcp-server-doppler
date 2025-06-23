@@ -4,11 +4,11 @@
   "description": "Unified Model Context Protocol server for Doppler secret management with optional intelligence features",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lepion/mcp-server-doppler.git"
+    "url": "https://github.com/kayaozkur/mcp-server-doppler.git"
   },
-  "homepage": "https://github.com/lepion/mcp-server-doppler#readme",
+  "homepage": "https://github.com/kayaozkur/mcp-server-doppler#readme",
   "bugs": {
-    "url": "https://github.com/lepion/mcp-server-doppler/issues"
+    "url": "https://github.com/kayaozkur/mcp-server-doppler/issues"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
