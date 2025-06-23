@@ -4,11 +4,11 @@
   "description": "Unified Model Context Protocol server for Doppler secret management with optional intelligence features",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kayaozkur/mcp-server-doppler.git"
+    "url": "https://github.com/lepion/mcp-server-doppler.git"
   },
-  "homepage": "https://github.com/kayaozkur/mcp-server-doppler#readme",
+  "homepage": "https://github.com/lepion/mcp-server-doppler#readme",
   "bugs": {
-    "url": "https://github.com/kayaozkur/mcp-server-doppler/issues"
+    "url": "https://github.com/lepion/mcp-server-doppler/issues"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,10 +22,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/unified-index.ts",
+    "dev": "tsx src/index.ts",
     "dev:legacy": "tsx src/index.ts",
     "dev:enhanced": "tsx src/enhanced-index.ts",
-    "start": "node dist/unified-index.js",
+    "start": "node dist/index.js",
     "start:legacy": "node dist/index.js",
     "start:enhanced": "node dist/enhanced-index.js",
     "test": "jest",
