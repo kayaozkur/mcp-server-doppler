@@ -1,19 +1,19 @@
 {
-  "name": "mcp-doppler-server",
-  "version": "0.1.3",
-  "description": "Model Context Protocol server for Doppler secret management",
+  "name": "@lepion/mcp-server-doppler",
+  "version": "0.2.0",
+  "description": "Unified Model Context Protocol server for Doppler secret management with optional intelligence features",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kayaozkur/mcp-doppler-server.git"
+    "url": "https://github.com/kayaozkur/mcp-server-doppler.git"
   },
-  "homepage": "https://github.com/kayaozkur/mcp-doppler-server#readme",
+  "homepage": "https://github.com/kayaozkur/mcp-server-doppler#readme",
   "bugs": {
-    "url": "https://github.com/kayaozkur/mcp-doppler-server/issues"
+    "url": "https://github.com/kayaozkur/mcp-server-doppler/issues"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "mcp-doppler-server": "dist/index.js"
+    "@lepion/mcp-server-doppler": "dist/index.js"
   },
   "files": [
     "dist/**/*",
@@ -22,8 +22,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
+    "dev": "tsx src/unified-index.ts",
+    "dev:legacy": "tsx src/index.ts",
+    "dev:enhanced": "tsx src/enhanced-index.ts",
+    "start": "node dist/unified-index.js",
+    "start:legacy": "node dist/index.js",
+    "start:enhanced": "node dist/enhanced-index.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:integration": "RUN_INTEGRATION_TESTS=true jest --testMatch='**/*.integration.test.ts' --runInBand",
