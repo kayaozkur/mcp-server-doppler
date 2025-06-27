@@ -1,6 +1,6 @@
 {
   "name": "@lepion/mcp-server-doppler",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Unified Model Context Protocol server for Doppler secret management with optional intelligence features",
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
   "author": "Lepion Team",
   "license": "MIT",
   "dependencies": {
+    "@eslint-community/eslint-utils": "^4.7.0",
     "@modelcontextprotocol/sdk": "^1.13.0",
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
