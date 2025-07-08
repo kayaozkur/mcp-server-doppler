@@ -1,7 +1,7 @@
 /**
  * Basic Usage Example for MCP Doppler Server
  * 
- * This example shows how to configure and use the MCP Doppler Server
+ * This example shows how to configure and use the simplified MCP Doppler Server
  * with Claude Desktop or other MCP-compatible clients.
  */
 
@@ -10,9 +10,10 @@
 const claudeConfig = {
   "mcpServers": {
     "doppler": {
-      "command": "mcp-doppler-server",
+      "command": "npx",
+      "args": ["@lepion/mcp-server-doppler"],
       "env": {
-        "DOPPLER_TOKEN": "dp.ct.your_token_here"
+        "DOPPLER_TOKEN": "dp.st.your_service_token"
       }
     }
   }
@@ -21,74 +22,58 @@ const claudeConfig = {
 console.log("Claude Desktop Configuration:");
 console.log(JSON.stringify(claudeConfig, null, 2));
 
-// Example 2: Using with Python Client
-console.log("\n\nPython Client Usage:");
-console.log(`
-from mcp_doppler_client import MCPDopplerClient
-
-# Initialize client
-with MCPDopplerClient() as client:
-    # List all projects
-    projects = client.list_projects()
-    print(f"Found {len(projects)} projects")
-    
-    # Get secrets from a specific project/config
-    secrets = client.list_secrets("myapp", "production")
-    print(f"Found {len(secrets)} secrets")
-    
-    # Set a new secret
-    client.set_secret("myapp", "development", "API_KEY", "sk-12345")
-    print("Secret set successfully")
-`);
-
-// Example 3: Common Operations
-console.log("\n\nCommon Doppler Operations via MCP:");
+// Example 2: Available Tools
+console.log("\n\nAvailable Tools:");
 console.log(`
 1. List Projects:
    - Tool: doppler_list_projects
    - No parameters required
+   - Returns: Array of project objects with id, slug, name, description
 
-2. Get All Secrets:
+2. List Secret Names:
    - Tool: doppler_list_secrets
    - Parameters: { project: "myapp", config: "production" }
+   - Returns: Array of secret names (e.g., ["DATABASE_URL", "API_KEY"])
 
-3. Set a Secret:
-   - Tool: doppler_set_secret
+3. Get Secret Value:
+   - Tool: doppler_get_secret
    - Parameters: { 
        project: "myapp", 
-       config: "development", 
-       name: "DATABASE_URL", 
-       value: "postgresql://..." 
+       config: "production", 
+       name: "DATABASE_URL" 
      }
+   - Returns: Object with name and value (raw and computed)
+`);
 
-4. Promote Secrets:
-   - Tool: doppler_promote_secrets
-   - Parameters: {
-       project: "myapp",
-       sourceConfig: "staging",
-       targetConfig: "production",
-       excludeKeys: ["DEBUG", "DEV_MODE"]
-     }
+// Example 3: Usage Examples in Claude
+console.log("\n\nUsage Examples in Claude:");
+console.log(`
+"List all my Doppler projects"
+→ Claude will use doppler_list_projects
 
-5. Create Service Token:
-   - Tool: doppler_create_service_token
-   - Parameters: {
-       project: "myapp",
-       config: "production",
-       name: "ci-cd-token",
-       access: "read"
-     }
+"Show me all secrets in the production environment of myapp"
+→ Claude will use doppler_list_secrets with project="myapp" and config="production"
+
+"What's the value of DATABASE_URL in staging?"
+→ Claude will use doppler_get_secret with the appropriate parameters
 `);
 
 // Example 4: Environment Setup
 console.log("\n\nEnvironment Setup:");
 console.log(`
-# Set your Doppler token
-export DOPPLER_TOKEN=dp.ct.your_token_here
+# Set your Doppler token (use read-only service tokens for security)
+export DOPPLER_TOKEN=dp.st.your_service_token
+
+# Optional: Set log level for debugging
+export LOG_LEVEL=debug
 
 # Or use a .env file
-echo "DOPPLER_TOKEN=dp.ct.your_token_here" > .env
+echo "DOPPLER_TOKEN=dp.st.your_service_token" > .env
 
-# Run the server
-mcp-doppler-server
+# Run the server directly
+npx @lepion/mcp-server-doppler
+
+# Or install globally and run
+npm install -g @lepion/mcp-server-doppler
+mcp-server-doppler
 `);

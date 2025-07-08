@@ -1,7 +1,7 @@
 {
   "name": "@lepion/mcp-server-doppler",
-  "version": "0.2.0",
-  "description": "Unified Model Context Protocol server for Doppler secret management with optional intelligence features",
+  "version": "0.3.0",
+  "description": "Simplified Model Context Protocol server for read-only Doppler secret access",
   "repository": {
     "type": "git",
     "url": "https://github.com/kayaozkur/mcp-server-doppler.git"
@@ -23,11 +23,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "dev:legacy": "tsx src/index.ts",
-    "dev:enhanced": "tsx src/enhanced-index.ts",
     "start": "node dist/index.js",
-    "start:legacy": "node dist/index.js",
-    "start:enhanced": "node dist/enhanced-index.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:integration": "RUN_INTEGRATION_TESTS=true jest --testMatch='**/*.integration.test.ts' --runInBand",

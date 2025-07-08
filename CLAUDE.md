@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the MCP (Model Context Protocol) Server for Doppler - a TypeScript implementation that enables AI assistants to interact with Doppler's secret management platform. The project provides both core functionality and optional AI-powered intelligence features.
+This is a simplified MCP (Model Context Protocol) Server for Doppler - a TypeScript implementation that enables AI assistants to read secrets from Doppler's secret management platform. The project provides read-only access through three core tools.
 
 ## Key Commands
 
@@ -16,7 +16,6 @@ This is the MCP (Model Context Protocol) Server for Doppler - a TypeScript imple
 ### Testing
 - `npm test` - Run unit tests
 - `npm run test:coverage` - Run tests with coverage report
-- `npm run test:integration` - Run integration tests (requires `RUN_INTEGRATION_TESTS=true` and real Doppler token)
 
 ### Code Quality
 - `npm run lint` - Run ESLint checks
@@ -29,26 +28,22 @@ This is the MCP (Model Context Protocol) Server for Doppler - a TypeScript imple
 
 ## Architecture Overview
 
-The codebase follows a modular architecture with clear separation of concerns:
+The codebase follows a simple modular architecture:
 
 ### Core Components
-- **`src/index.ts`** - Unified entry point that combines all features
+- **`src/index.ts`** - Main entry point and MCP server implementation
 - **`src/doppler-client.ts`** - HTTP client for Doppler API interactions
-- **`src/tools.ts`** - Core MCP tool definitions (8 tools)
-- **`src/intelligence-tools.ts`** - Optional AI-powered tools (3 tools)
+- **`src/tools.ts`** - MCP tool definitions (3 tools)
 - **`src/logger.ts`** - Winston logger configuration
 
 ### Tool System
-The server implements two categories of tools:
-1. **Core Tools**: Basic Doppler operations (list projects, manage secrets, etc.)
-2. **Intelligence Tools**: AI-powered features (security recommendations, validation, troubleshooting)
-
-Intelligence features are opt-in via the `DOPPLER_ENABLE_INTELLIGENCE` environment variable.
+The server implements three read-only tools:
+1. **doppler_list_projects** - List all accessible projects
+2. **doppler_list_secrets** - List secret names in a project/config
+3. **doppler_get_secret** - Get a specific secret value
 
 ### Testing Strategy
 - Unit tests for individual components
-- Integration tests for API interactions
-- Performance benchmarks for optimization validation
 - Minimum 50% code coverage requirement
 
 ## Development Practices
@@ -56,8 +51,7 @@ Intelligence features are opt-in via the `DOPPLER_ENABLE_INTELLIGENCE` environme
 ### Environment Setup
 1. Copy `.env.example` to `.env`
 2. Set `DOPPLER_TOKEN` with a valid Doppler service token
-3. Optionally set `DOPPLER_ENABLE_INTELLIGENCE=true` for AI features
-4. Set `LOG_LEVEL` as needed (debug, info, warn, error)
+3. Set `LOG_LEVEL` as needed (debug, info, warn, error)
 
 ### TypeScript Configuration
 - Strict mode is enabled - all types must be explicitly defined
@@ -76,27 +70,13 @@ Intelligence features are opt-in via the `DOPPLER_ENABLE_INTELLIGENCE` environme
 
 ## Common Tasks
 
-### Adding a New Tool
-1. Define the tool schema in `src/tools.ts` or `src/intelligence-tools.ts`
-2. Implement the handler function with proper error handling
-3. Add comprehensive tests in `src/__tests__/`
-4. Update usage examples in `examples/`
-
 ### Debugging
 - Set `LOG_LEVEL=debug` for verbose logging
 - Use `npm run dev` for hot reload during development
 - Check `src/__tests__/` for usage patterns
 
-### Performance Optimization
-1. Run benchmarks before changes: `npm run benchmark`
-2. Make optimizations
-3. Run benchmarks after to verify improvements
-4. Document significant changes in commit messages
-
 ## Important Notes
 
-- This is a unified implementation (v0.2.0) that combines original and enhanced features
-- Backward compatibility must be maintained for existing integrations
+- This is a simplified implementation (v0.3.0) for read-only access
 - The npm package is published under `@lepion` scope
 - Minimum Node.js version is 18
-- Docker support includes multi-platform builds
