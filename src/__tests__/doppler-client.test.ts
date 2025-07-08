@@ -75,29 +75,6 @@ describe('DopplerClient', () => {
     });
   });
 
-  describe('listConfigs', () => {
-    it('should return list of configs for a project', async () => {
-      const mockConfigs = {
-        configs: [
-          { name: 'dev', environment: 'development' },
-          { name: 'prod', environment: 'production' }
-        ]
-      };
-
-      mockAxiosInstance.get.mockResolvedValueOnce({ data: mockConfigs });
-
-      const result = await client.listConfigs('test-project');
-
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        '/configs',
-        expect.objectContaining({
-          params: { project: 'test-project', per_page: 100 }
-        })
-      );
-      expect(result).toEqual(mockConfigs.configs);
-    });
-  });
-
   describe('listSecrets', () => {
     it('should return list of secret names', async () => {
       mockAxiosInstance.get.mockResolvedValueOnce({ data: { names: ['DATABASE_URL', 'API_KEY'] } });
@@ -160,147 +137,22 @@ describe('DopplerClient', () => {
     });
   });
 
-  describe('setSecret', () => {
-    it('should create new secret', async () => {
-      const mockResponse = { secrets: { NEW_KEY: { created: true } } };
-      mockAxiosInstance.post.mockResolvedValueOnce({ data: mockResponse });
+  describe('validateConnection', () => {
+    it('should return true on successful connection', async () => {
+      mockAxiosInstance.get.mockResolvedValueOnce({ data: {} });
 
-      const result = await client.setSecret('test-project', 'dev', 'NEW_KEY', 'new-value');
+      const result = await client.validateConnection();
 
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/configs/config/secrets',
-        {
-          project: 'test-project',
-          config: 'dev',
-          secrets: { NEW_KEY: 'new-value' }
-        }
-      );
-      expect(result).toEqual({ created: true });
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/me');
+      expect(result).toBe(true);
     });
-  });
 
-  describe('deleteSecrets', () => {
-    it('should delete multiple secrets', async () => {
-      mockAxiosInstance.delete.mockResolvedValueOnce({ data: {} });
+    it('should return false on connection failure', async () => {
+      mockAxiosInstance.get.mockRejectedValueOnce(new Error('Unauthorized'));
 
-      await client.deleteSecrets('test-project', 'dev', ['KEY1', 'KEY2']);
+      const result = await client.validateConnection();
 
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        '/configs/config/secrets',
-        expect.objectContaining({
-          data: {
-            project: 'test-project',
-            config: 'dev',
-            secrets: ['KEY1', 'KEY2']
-          }
-        })
-      );
-    });
-  });
-
-  describe('promoteSecrets', () => {
-    it('should promote secrets between configs', async () => {
-      // Mock get secrets
-      mockAxiosInstance.get.mockResolvedValueOnce({
-        data: {
-          DATABASE_URL: 'postgres://...',
-          API_KEY: 'sk-123',
-          DEBUG: 'true'
-        }
-      });
-
-      // Mock set secrets
-      mockAxiosInstance.post.mockResolvedValueOnce({ data: {} });
-
-      const result = await client.promoteSecrets(
-        'test-project',
-        'dev',
-        'staging',
-        ['DEBUG']
-      );
-
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/configs/config/secrets',
-        {
-          project: 'test-project',
-          config: 'staging',
-          secrets: {
-            DATABASE_URL: 'postgres://...',
-            API_KEY: 'sk-123'
-          }
-        }
-      );
-      expect(result).toEqual({ count: 2 });
-    });
-  });
-
-  describe('createServiceToken', () => {
-    it('should create service token with read access', async () => {
-      const mockToken = {
-        token: {
-          name: 'ci-token',
-          key: 'dp.st.dev.abc123',
-          access: 'read'
-        }
-      };
-
-      mockAxiosInstance.post.mockResolvedValueOnce({ data: mockToken });
-
-      const result = await client.createServiceToken(
-        'test-project',
-        'dev',
-        'ci-token',
-        'read'
-      );
-
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/configs/config/tokens',
-        {
-          project: 'test-project',
-          config: 'dev',
-          name: 'ci-token',
-          access: 'read'
-        }
-      );
-      expect(result).toEqual({
-        name: 'ci-token',
-        key: 'dp.st.dev.abc123',
-        access: 'read'
-      });
-    });
-  });
-
-  describe('getActivityLogs', () => {
-    it('should fetch activity logs', async () => {
-      const mockLogs = {
-        logs: [
-          {
-            id: '1',
-            created_at: '2024-01-01T00:00:00Z',
-            user: { email: 'user@example.com' },
-            action: 'secret.updated',
-            config: { name: 'dev' }
-          }
-        ],
-        page: 1,
-        total: 1
-      };
-
-      mockAxiosInstance.get.mockResolvedValueOnce({ data: mockLogs });
-
-      const result = await client.getActivityLogs('test-project', 1, 20);
-
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        '/logs',
-        expect.objectContaining({
-          params: {
-            project: 'test-project',
-            page: 1,
-            per_page: 20
-          }
-        })
-      );
-      expect(result).toEqual(mockLogs.logs);
+      expect(result).toBe(false);
     });
   });
 });

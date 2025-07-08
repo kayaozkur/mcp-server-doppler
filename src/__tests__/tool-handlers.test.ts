@@ -6,11 +6,6 @@ describe('Tool Definitions', () => {
       'doppler_list_projects',
       'doppler_list_secrets',
       'doppler_get_secret',
-      'doppler_set_secret',
-      'doppler_delete_secrets',
-      'doppler_promote_secrets',
-      'doppler_create_service_token',
-      'doppler_get_activity_logs'
     ];
 
     const toolNames = TOOLS.map(tool => tool.name);
@@ -41,33 +36,6 @@ describe('Tool Definitions', () => {
     it('doppler_get_secret should require project, config, and name', () => {
       const tool = TOOLS.find(t => t.name === 'doppler_get_secret');
       expect(tool?.inputSchema.required).toEqual(['project', 'config', 'name']);
-    });
-
-    it('doppler_set_secret should require project, config, name, and value', () => {
-      const tool = TOOLS.find(t => t.name === 'doppler_set_secret');
-      expect(tool?.inputSchema.required).toEqual(['project', 'config', 'name', 'value']);
-    });
-
-    it('doppler_delete_secrets should require project, config, and secrets array', () => {
-      const tool = TOOLS.find(t => t.name === 'doppler_delete_secrets');
-      expect(tool?.inputSchema.required).toEqual(['project', 'config', 'secrets']);
-      const secretsProp = tool?.inputSchema.properties?.secrets as any;
-      expect(secretsProp?.type).toBe('array');
-    });
-
-    it('doppler_promote_secrets should require project, sourceConfig, and targetConfig', () => {
-      const tool = TOOLS.find(t => t.name === 'doppler_promote_secrets');
-      expect(tool?.inputSchema.required).toEqual(['project', 'sourceConfig', 'targetConfig']);
-    });
-
-    it('doppler_create_service_token should require project, config, and name', () => {
-      const tool = TOOLS.find(t => t.name === 'doppler_create_service_token');
-      expect(tool?.inputSchema.required).toEqual(['project', 'config', 'name']);
-    });
-
-    it('doppler_get_activity_logs should have optional fields', () => {
-      const tool = TOOLS.find(t => t.name === 'doppler_get_activity_logs');
-      expect(tool?.inputSchema.required).toBeUndefined();
     });
   });
 });
